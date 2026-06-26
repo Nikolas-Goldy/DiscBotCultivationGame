@@ -1,0 +1,2 @@
+# DiscBotCultivationGame
+⚡ Path of the Immortal (修仙之路) — A full-stack Discord cultivation RPG.  Players progress through 7 realms (Qi Condensation → True Immortal) by cultivating Qi, crafting pills, joining sects, and dueling rivals. Jade Coins (premium currency) are purchased on the website and credited to the player's account automatically via Midtrans BCA Virtual Account.  Stack: Discord.py bot · FastAPI backend · PostgreSQL · Discord OAuth2 · Midtrans payments · Vanilla HTML/CSS/JS frontend
