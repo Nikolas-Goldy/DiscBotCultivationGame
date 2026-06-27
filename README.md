@@ -22,20 +22,16 @@ path-of-the-immortal/
 └── README.md
 ```
 
-Open the root folder `path-of-the-immortal/` in VS Code to see everything.
-
 ---
 
 ## 🛠️ Setup Guide
 
-### Step 1 — PostgreSQL Database (DBeaver)
+### Step 1 — PostgreSQL Database (DBeaver or PgAdmin4)
 
 1. Download DBeaver: https://dbeaver.io/download/
-2. Get a free PostgreSQL database:
-   - **Supabase** (recommended): https://supabase.com → New Project → copy the connection string
-   - **Neon**: https://neon.tech → also free
-   - **Railway**: https://railway.com → currently use
-3. Open DBeaver → New Connection → PostgreSQL → paste your connection string
+2. PostgreSQL database:
+   - **Supabase** : https://supabase.com
+3. Open DBeaver
 4. The tables are created automatically when the backend starts
 
 ---
@@ -90,8 +86,6 @@ cp .env.example .env
 # Run the backend
 uvicorn main:app --reload --port 8000
 ```
-
-Backend runs at: http://localhost:8000
 
 ---
 
@@ -183,13 +177,13 @@ Copy the `https://xxxx.ngrok.io` URL and set it in Midtrans dashboard as the not
 
 ---
 
-## 🚀 Deployment (Going Live)
+## 🚀 Deployment (Still Pending For Go Live)
 
 | Service | What it hosts | Cost |
 |---------|--------------|------|
 | **Railway** | Backend (FastAPI) + Bot | Free tier |
-| **Netlify / GitHub Pages** | Frontend (HTML) | Free |
-| **Supabase / Neon** | PostgreSQL | Free tier |
+| **Vercel / GitHub Pages** | Frontend (HTML, CSS, JavaScript) | Free |
+| **Supabase** | PostgreSQL | Free tier |
 
 1. Deploy backend to Railway → copy the URL → update `BACKEND_URL` and Discord redirect URI
 2. Deploy frontend to Netlify → copy URL → update `FRONTEND_URL` in backend `.env`
