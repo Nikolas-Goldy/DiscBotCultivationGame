@@ -17,10 +17,10 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import asyncpg
+from pathlib import Path
 
-load_dotenv()
-
-BOT_TOKEN  = os.getenv("DISCORD_BOT_TOKEN")
+load_dotenv(dotenv_path=Path(__file__).parent / ".env")
+BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 CULTIVATE_COOLDOWN = 3600   # 1 hour
@@ -196,7 +196,7 @@ async def cmd_status(interaction: discord.Interaction):
         item_ok = (next_r["item_req"] is None) or (inv.get(next_r["item_req"], 0) > 0)
         breakthrough_info = (
             f"\n**Next Realm:** {next_r['name']}\n"
-            f"Qi needed: {qi_needed:,} · Item: {'✅' if item_ok else f'❌ Need {next_r[\"item_req\"]}'}"
+            f"Qi needed: {qi_needed:,} · Item: {'✅' if item_ok else '❌ Need ' + next_r['item_req']}"
         )
 
     sect_name = "None"
