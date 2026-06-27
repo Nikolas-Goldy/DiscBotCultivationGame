@@ -34,6 +34,7 @@ Open the root folder `path-of-the-immortal/` in VS Code to see everything.
 2. Get a free PostgreSQL database:
    - **Supabase** (recommended): https://supabase.com → New Project → copy the connection string
    - **Neon**: https://neon.tech → also free
+   - **Railway**: https://railway.com → currently use
 3. Open DBeaver → New Connection → PostgreSQL → paste your connection string
 4. The tables are created automatically when the backend starts
 
@@ -50,7 +51,7 @@ Open the root folder `path-of-the-immortal/` in VS Code to see everything.
 5. Go to **OAuth2** tab → copy **Client ID** and **Client Secret**
 6. Under **Redirects**, add:
    - `http://localhost:8000/auth/callback` (for development)
-   - `https://yourdomain.com/auth/callback` (for production)
+   - `https://domain.com/auth/callback` (for production)
 7. Invite the bot to your server:
    - OAuth2 → URL Generator → Scopes: `bot`, `applications.commands`
    - Permissions: `Send Messages`, `Embed Links`, `Read Message History`
@@ -64,7 +65,7 @@ Open the root folder `path-of-the-immortal/` in VS Code to see everything.
 2. Go to **Settings → Access Keys**
 3. Copy **Server Key** and **Client Key** (use Sandbox keys while testing)
 4. Go to **Settings → Payment → Notification URL** and add:
-   - `https://yourdomain.com/webhook/midtrans`
+   - `https://domain.com/webhook/midtrans`
    - (For local testing use ngrok — see below)
 
 ---
@@ -104,8 +105,8 @@ Backend runs at: http://localhost:8000
 > Make sure `FRONTEND_URL=http://127.0.0.1:5500` in your `.env`
 
 Two things to update in `index.html`:
-- Line with `YOUR_MIDTRANS_CLIENT_KEY` → replace with your actual Midtrans client key
-- Line with `YOUR_DISCORD_INVITE_LINK` → replace with your Discord server invite
+- Line with `MIDTRANS_CLIENT_KEY` → replace with your actual Midtrans client key
+- Line with `DISCORD_INVITE_LINK` → replace with your Discord server invite
 - Line with `const BACKEND = 'http://localhost:8000'` → replace with your deployed backend URL when going live
 
 ---
