@@ -4,22 +4,895 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Path of the Immortal</title>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"
-      defer
-    ></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" href="style.css"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
     />
-    <script
-      src="https://app.sandbox.midtrans.com/snap/snap.js"
-      data-client-key="YOUR_MIDTRANS_CLIENT_KEY"
-    ></script>
-    <!-- Change to production when live:
-  src="https://app.midtrans.com/snap/snap.js"
--->
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js"></script>
+    <style>
+      :root {
+        --jade: #1a7a5c;
+        --jade-light: #2aad82;
+        --jade-glow: #3dffc0;
+        --jade-dim: #0d4a37;
+        --gold: #c9922a;
+        --gold-light: #e8b84b;
+        --gold-pale: #f5dfa0;
+        --ink: #0c0e10;
+        --ink-soft: #141820;
+        --ink-mid: #1e2530;
+        --mist: #a8b8c8;
+        --mist-dim: #6a7a88;
+        --scroll: #f0ead8;
+        --scroll-dark: #ddd0b0;
+        --crimson: #8b1a1a;
+        --void: #07090c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--void);
+        color: var(--mist);
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 3rem;
+        background: rgba(7, 9, 12, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(26, 122, 92, 0.2);
+      }
+      .nav-logo {
+        font-family: "Cinzel", serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--jade-light);
+        letter-spacing: 0.08em;
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--mist-dim);
+        text-decoration: none;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--jade-light);
+      }
+      .nav-cta {
+        background: transparent;
+        border: 1px solid var(--jade);
+        color: var(--jade-light);
+        padding: 0.5rem 1.4rem;
+        border-radius: 2px;
+        font-family: "Cinzel", serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .nav-cta:hover {
+        background: var(--jade);
+        color: #fff;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 8rem 2rem 4rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 60% 50% at 50% 60%,
+            rgba(26, 122, 92, 0.12) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse 40% 30% at 50% 85%,
+            rgba(201, 146, 42, 0.08) 0%,
+            transparent 60%
+          );
+      }
+      .hero-lines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(26, 122, 92, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(26, 122, 92, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+      }
+      .hero-eyebrow {
+        font-family: "Cinzel", serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        color: var(--jade-light);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .hero-eyebrow::before,
+      .hero-eyebrow::after {
+        content: "";
+        display: block;
+        height: 1px;
+        width: 60px;
+        background: linear-gradient(90deg, transparent, var(--jade-light));
+      }
+      .hero-eyebrow::after {
+        transform: scaleX(-1);
+      }
+
+      .hero-title {
+        font-family: "Cinzel", serif;
+        font-size: clamp(3rem, 8vw, 6.5rem);
+        font-weight: 700;
+        line-height: 1.05;
+        color: var(--scroll);
+        letter-spacing: -0.01em;
+        position: relative;
+        margin-bottom: 0.3rem;
+      }
+      .hero-title span {
+        color: var(--jade-light);
+      }
+
+      .hero-subtitle-line {
+        font-family: "Cinzel", serif;
+        font-size: clamp(1rem, 2.5vw, 1.6rem);
+        font-weight: 400;
+        color: var(--gold);
+        letter-spacing: 0.2em;
+        margin-bottom: 2rem;
+        position: relative;
+      }
+
+      .hero-desc {
+        font-family: "EB Garamond", serif;
+        font-size: 1.2rem;
+        color: var(--mist-dim);
+        max-width: 560px;
+        margin: 0 auto 3rem;
+        font-style: italic;
+        line-height: 1.8;
+        position: relative;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+      }
+      .btn-primary {
+        background: var(--jade);
+        color: #fff;
+        border: none;
+        padding: 0.9rem 2.2rem;
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        border-radius: 2px;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          transform 0.15s;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        background: var(--jade-light);
+        transform: translateY(-1px);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--mist);
+        border: 1px solid rgba(168, 184, 200, 0.3);
+        padding: 0.9rem 2.2rem;
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        border-radius: 2px;
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+        display: inline-block;
+      }
+      .btn-secondary:hover {
+        border-color: var(--jade-light);
+        color: var(--jade-light);
+      }
+
+      .hero-scroll-hint {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--mist-dim);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        animation: bounce 2s infinite;
+      }
+      .hero-scroll-hint::after {
+        content: "↓";
+        color: var(--jade-light);
+        font-size: 1.2rem;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(6px);
+        }
+      }
+
+      /* DIVIDER */
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 0 3rem;
+        margin: 0 auto;
+        max-width: 900px;
+      }
+      .divider-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(26, 122, 92, 0.3),
+          transparent
+        );
+      }
+      .divider-rune {
+        font-family: "Cinzel", serif;
+        color: var(--jade-dim);
+        font-size: 1.2rem;
+      }
+
+      /* SECTIONS */
+      section {
+        padding: 6rem 2rem;
+        position: relative;
+      }
+      .section-label {
+        font-family: "Cinzel", serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.3em;
+        color: var(--jade-light);
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      .section-title {
+        font-family: "Cinzel", serif;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        color: var(--scroll);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+      .section-desc {
+        font-family: "EB Garamond", serif;
+        font-size: 1.1rem;
+        color: var(--mist-dim);
+        max-width: 560px;
+        line-height: 1.9;
+        font-style: italic;
+      }
+      .centered {
+        text-align: center;
+        margin: 0 auto;
+      }
+      .centered .section-desc {
+        margin: 0 auto;
+      }
+
+      /* FEATURES */
+      #features {
+        background: var(--ink);
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5px;
+        max-width: 1100px;
+        margin: 4rem auto 0;
+        border: 1.5px solid rgba(26, 122, 92, 0.15);
+      }
+      .feature-card {
+        background: var(--ink-soft);
+        padding: 2.5rem;
+        position: relative;
+        transition: background 0.2s;
+      }
+      .feature-card:hover {
+        background: var(--ink-mid);
+      }
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+        display: block;
+      }
+      .feature-name {
+        font-family: "Cinzel", serif;
+        font-size: 1rem;
+        color: var(--scroll);
+        margin-bottom: 0.7rem;
+        font-weight: 600;
+      }
+      .feature-text {
+        font-size: 0.875rem;
+        color: var(--mist-dim);
+        line-height: 1.8;
+      }
+
+      /* REALMS */
+      #realms {
+        background: var(--void);
+      }
+      .realm-container {
+        max-width: 900px;
+        margin: 4rem auto 0;
+      }
+      .realm-row {
+        display: grid;
+        grid-template-columns: 60px 1fr auto;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid rgba(168, 184, 200, 0.08);
+        transition: background 0.15s;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        border-radius: 2px;
+      }
+      .realm-row:hover {
+        background: rgba(26, 122, 92, 0.06);
+      }
+      .realm-num {
+        font-family: "Cinzel", serif;
+        font-size: 0.7rem;
+        color: var(--jade);
+        letter-spacing: 0.1em;
+        text-align: center;
+      }
+      .realm-name {
+        font-family: "Cinzel", serif;
+        font-size: 1rem;
+        color: var(--scroll);
+        margin-bottom: 0.2rem;
+      }
+      .realm-title {
+        font-size: 0.8rem;
+        color: var(--mist-dim);
+      }
+      .realm-req {
+        font-size: 0.8rem;
+        color: var(--gold);
+        text-align: right;
+        white-space: nowrap;
+      }
+      .realm-row.locked {
+        opacity: 0.4;
+      }
+      .realm-row.legendary .realm-name {
+        color: var(--gold-light);
+      }
+      .realm-row.legendary .realm-num {
+        color: var(--gold);
+      }
+
+      /* HOW TO PLAY */
+      #howtoplay {
+        background: var(--ink);
+      }
+      .steps-wrap {
+        max-width: 800px;
+        margin: 4rem auto 0;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+        position: relative;
+      }
+      .step::before {
+        content: "";
+        position: absolute;
+        left: 23px;
+        top: 50px;
+        bottom: -2.5rem;
+        width: 1px;
+        background: linear-gradient(
+          180deg,
+          rgba(26, 122, 92, 0.4),
+          transparent
+        );
+      }
+      .step:last-child::before {
+        display: none;
+      }
+      .step-num {
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--jade);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        color: var(--jade-light);
+        flex-shrink: 0;
+      }
+      .step-title {
+        font-family: "Cinzel", serif;
+        font-size: 1rem;
+        color: var(--scroll);
+        margin-bottom: 0.4rem;
+        padding-top: 0.7rem;
+      }
+      .step-desc {
+        font-size: 0.875rem;
+        color: var(--mist-dim);
+        line-height: 1.8;
+      }
+      .step-cmd {
+        display: inline-block;
+        margin-top: 0.5rem;
+        background: rgba(26, 122, 92, 0.15);
+        border: 1px solid rgba(26, 122, 92, 0.3);
+        color: var(--jade-light);
+        font-family: monospace;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.8rem;
+        border-radius: 2px;
+      }
+
+      /* CURRENCY / SHOP */
+      #shop {
+        background: var(--void);
+      }
+      .shop-intro {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .currency-explainer {
+        max-width: 700px;
+        margin: 3rem auto;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 1rem;
+        align-items: center;
+        text-align: center;
+      }
+      .currency-card {
+        background: var(--ink-soft);
+        border: 1px solid rgba(168, 184, 200, 0.1);
+        border-radius: 4px;
+        padding: 2rem;
+      }
+      .currency-icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 0.8rem;
+      }
+      .currency-name {
+        font-family: "Cinzel", serif;
+        color: var(--scroll);
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+      .currency-desc {
+        font-size: 0.8rem;
+        color: var(--mist-dim);
+      }
+      .currency-arrow {
+        color: var(--jade);
+        font-size: 1.5rem;
+      }
+      .currency-rate {
+        font-family: "Cinzel", serif;
+        font-size: 0.75rem;
+        color: var(--jade-light);
+        margin-top: 0.5rem;
+        letter-spacing: 0.05em;
+      }
+
+      /* PACKAGES */
+      .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .pkg-card {
+        background: var(--ink-soft);
+        border: 1px solid rgba(168, 184, 200, 0.1);
+        border-radius: 4px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        position: relative;
+        transition:
+          border-color 0.2s,
+          transform 0.15s;
+        cursor: pointer;
+      }
+      .pkg-card:hover {
+        border-color: var(--jade);
+        transform: translateY(-2px);
+      }
+      .pkg-card.featured {
+        border-color: var(--jade);
+        background: var(--ink-mid);
+      }
+      .pkg-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--jade);
+        color: #fff;
+        font-family: "Cinzel", serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        padding: 0.2rem 0.9rem;
+        border-radius: 20px;
+        white-space: nowrap;
+      }
+      .pkg-icon {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 1rem;
+      }
+      .pkg-name {
+        font-family: "Cinzel", serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        color: var(--mist-dim);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+      }
+      .pkg-amount {
+        font-family: "Cinzel", serif;
+        font-size: 2rem;
+        color: var(--gold-light);
+        font-weight: 700;
+        line-height: 1;
+      }
+      .pkg-coin-label {
+        font-size: 0.75rem;
+        color: var(--mist-dim);
+        margin: 0.3rem 0 1rem;
+      }
+      .pkg-bonus {
+        font-size: 0.78rem;
+        color: var(--jade-light);
+        margin-bottom: 1.2rem;
+        min-height: 1.2em;
+      }
+      .pkg-price {
+        font-family: "Cinzel", serif;
+        font-size: 1.3rem;
+        color: var(--scroll);
+        margin-bottom: 1.2rem;
+      }
+
+      /* MODAL */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(6px);
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-overlay.open {
+        display: flex;
+      }
+      .modal {
+        background: var(--ink-soft);
+        border: 1px solid rgba(26, 122, 92, 0.3);
+        border-radius: 4px;
+        padding: 2.5rem;
+        width: 90%;
+        max-width: 460px;
+        position: relative;
+      }
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.2rem;
+        background: none;
+        border: none;
+        color: var(--mist-dim);
+        font-size: 1.3rem;
+        cursor: pointer;
+      }
+      .modal-title {
+        font-family: "Cinzel", serif;
+        font-size: 1.3rem;
+        color: var(--scroll);
+        margin-bottom: 0.3rem;
+      }
+      .modal-sub {
+        font-size: 0.85rem;
+        color: var(--mist-dim);
+        margin-bottom: 1.5rem;
+      }
+      .modal-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--mist-dim);
+        margin-bottom: 0.3rem;
+        letter-spacing: 0.05em;
+        font-family: "Cinzel", serif;
+      }
+      .form-group input {
+        width: 100%;
+        background: var(--ink);
+        border: 1px solid rgba(168, 184, 200, 0.15);
+        color: var(--scroll);
+        padding: 0.65rem 0.9rem;
+        font-family: "Inter", sans-serif;
+        font-size: 0.875rem;
+        border-radius: 2px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .form-group input:focus {
+        border-color: var(--jade);
+      }
+      .modal-divider {
+        height: 1px;
+        background: rgba(168, 184, 200, 0.1);
+        margin: 1rem 0;
+      }
+      .modal-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        color: var(--mist-dim);
+        margin-bottom: 1.2rem;
+      }
+      .modal-total {
+        color: var(--gold-light);
+        font-size: 1.1rem;
+      }
+      .btn-pay {
+        width: 100%;
+        background: var(--jade);
+        border: none;
+        color: #fff;
+        padding: 0.9rem;
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: background 0.2s;
+      }
+      .btn-pay:hover {
+        background: var(--jade-light);
+      }
+      .modal-secure {
+        text-align: center;
+        font-size: 0.72rem;
+        color: var(--mist-dim);
+        margin-top: 0.8rem;
+        letter-spacing: 0.05em;
+      }
+      .modal-notice {
+        background: rgba(26, 122, 92, 0.1);
+        border: 1px solid rgba(26, 122, 92, 0.25);
+        border-radius: 2px;
+        padding: 0.8rem 1rem;
+        font-size: 0.8rem;
+        color: var(--jade-light);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      /* SUCCESS STATE */
+      .success-box {
+        display: none;
+        text-align: center;
+        padding: 1rem 0;
+      }
+      .success-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1rem;
+      }
+      .success-title {
+        font-family: "Cinzel", serif;
+        font-size: 1.2rem;
+        color: var(--jade-light);
+        margin-bottom: 0.5rem;
+      }
+      .success-code {
+        background: var(--ink);
+        border: 1px solid var(--jade);
+        color: var(--jade-light);
+        font-family: monospace;
+        font-size: 1.4rem;
+        letter-spacing: 0.2em;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2px;
+        margin: 1rem 0;
+        display: inline-block;
+      }
+      .success-desc {
+        font-size: 0.82rem;
+        color: var(--mist-dim);
+        line-height: 1.7;
+      }
+
+      /* DISCORD CTA */
+      #discord {
+        background: var(--ink);
+        text-align: center;
+      }
+      .discord-card {
+        max-width: 600px;
+        margin: 0 auto;
+        border: 1px solid rgba(88, 101, 242, 0.3);
+        border-radius: 4px;
+        padding: 3rem;
+        background: rgba(88, 101, 242, 0.05);
+      }
+      .discord-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1rem;
+      }
+      .discord-title {
+        font-family: "Cinzel", serif;
+        font-size: 1.6rem;
+        color: var(--scroll);
+        margin-bottom: 0.8rem;
+      }
+      .discord-desc {
+        font-size: 0.9rem;
+        color: var(--mist-dim);
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+      }
+      .btn-discord {
+        display: inline-block;
+        background: #5865f2;
+        color: #fff;
+        padding: 0.9rem 2.2rem;
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        border-radius: 2px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-discord:hover {
+        background: #4752c4;
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--void);
+        border-top: 1px solid rgba(26, 122, 92, 0.15);
+        padding: 2.5rem 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-logo {
+        font-family: "Cinzel", serif;
+        color: var(--jade);
+        font-size: 0.9rem;
+        letter-spacing: 0.1em;
+      }
+      .footer-note {
+        font-size: 0.75rem;
+        color: var(--mist-dim);
+      }
+
+      /* MOBILE */
+      @media (max-width: 640px) {
+        nav {
+          padding: 1rem 1.5rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        section {
+          padding: 4rem 1.2rem;
+        }
+        .currency-explainer {
+          grid-template-columns: 1fr;
+        }
+        .currency-arrow {
+          transform: rotate(90deg);
+        }
+        .modal {
+          padding: 1.8rem 1.3rem;
+        }
+        .modal-row {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- NAV -->
@@ -32,23 +905,7 @@
         <li><a href="#shop">Shop</a></li>
         <li><a href="#discord">Discord</a></li>
       </ul>
-      <div class="nav-right">
-        <div class="nav-user" id="nav-user">
-          <img id="nav-avatar" src="" alt="avatar" />
-          <span id="nav-username"></span>
-        </div>
-        <a
-          id="btn-login"
-          class="btn-discord-login"
-          href="#"
-          onclick="loginWithDiscord()"
-        >
-          Login with Discord
-        </a>
-        <a href="#shop" class="nav-cta" id="btn-shop-nav" style="display: none"
-          >Buy Jade Coins</a
-        >
-      </div>
+      <a href="#shop" class="nav-cta">Buy Jade Coins</a>
     </nav>
 
     <!-- HERO -->
@@ -102,15 +959,15 @@
           <p class="feature-name">Sect System</p>
           <p class="feature-text">
             Create or join a sect. Pool resources, wage sect wars, and climb the
-            collective leaderboard to dominate.
+            collective leaderboard to become the dominant faction.
           </p>
         </div>
         <div class="feature-card">
           <span class="feature-icon">⚗️</span>
           <p class="feature-name">Alchemy & Crafting</p>
           <p class="feature-text">
-            Gather spirit herbs and refine powerful pills that can accelerate
-            your breakthrough or heal wounds from battle.
+            Gather spirit herbs and refine powerful pills. The right pill can
+            accelerate your breakthrough or heal wounds from battle.
           </p>
         </div>
         <div class="feature-card">
@@ -118,15 +975,16 @@
           <p class="feature-name">Missions & Quests</p>
           <p class="feature-text">
             Take on daily sect missions to earn Spirit Stones and rare
-            materials. Higher realms unlock harder, more rewarding tasks.
+            materials. Higher realms unlock harder — and far more rewarding —
+            tasks.
           </p>
         </div>
         <div class="feature-card">
           <span class="feature-icon">🏆</span>
           <p class="feature-name">Leaderboards</p>
           <p class="feature-text">
-            The Heaven's Rankings update in real time. Earn prestige rewards for
-            holding a top position.
+            The Heaven's Rankings update in real time. Prove your superiority
+            and earn prestige rewards for holding a top position.
           </p>
         </div>
       </div>
@@ -146,7 +1004,9 @@
             <div class="realm-num">Ⅰ</div>
             <div>
               <p class="realm-name">Qi Condensation</p>
-              <p class="realm-title">Outer Disciple</p>
+              <p class="realm-title">
+                Outer Disciple — the beginning of all things
+              </p>
             </div>
             <div class="realm-req">Starting Realm</div>
           </div>
@@ -154,15 +1014,17 @@
             <div class="realm-num">Ⅱ</div>
             <div>
               <p class="realm-name">Foundation Building</p>
-              <p class="realm-title">Inner Disciple</p>
+              <p class="realm-title">Inner Disciple — the qi becomes solid</p>
             </div>
-            <div class="realm-req">500 Qi + Qi Pill</div>
+            <div class="realm-req">500 Qi + 1 Qi Pill</div>
           </div>
           <div class="realm-row">
             <div class="realm-num">Ⅲ</div>
             <div>
               <p class="realm-name">Core Formation</p>
-              <p class="realm-title">Elder Disciple</p>
+              <p class="realm-title">
+                Elder Disciple — a golden core takes shape
+              </p>
             </div>
             <div class="realm-req">2,000 Qi + Core Stone</div>
           </div>
@@ -170,7 +1032,9 @@
             <div class="realm-num">Ⅳ</div>
             <div>
               <p class="realm-name">Nascent Soul</p>
-              <p class="realm-title">Sect Guardian</p>
+              <p class="realm-title">
+                Sect Guardian — a soul-infant is born within
+              </p>
             </div>
             <div class="realm-req">8,000 Qi + Soul Jade</div>
           </div>
@@ -178,7 +1042,9 @@
             <div class="realm-num">Ⅴ</div>
             <div>
               <p class="realm-name">Spirit Severing</p>
-              <p class="realm-title">Sect Elder</p>
+              <p class="realm-title">
+                Sect Elder — sever all mortal attachments
+              </p>
             </div>
             <div class="realm-req">25,000 Qi + Heaven Shard</div>
           </div>
@@ -186,7 +1052,9 @@
             <div class="realm-num">Ⅵ</div>
             <div>
               <p class="realm-name">Dao Seeking</p>
-              <p class="realm-title">Sect Master</p>
+              <p class="realm-title">
+                Sect Master — pursue the fundamental truth
+              </p>
             </div>
             <div class="realm-req">80,000 Qi + Dao Scroll</div>
           </div>
@@ -194,7 +1062,9 @@
             <div class="realm-num">Ⅶ</div>
             <div>
               <p class="realm-name">True Immortal</p>
-              <p class="realm-title">Immortal</p>
+              <p class="realm-title">
+                Immortal — transcend the cycle of life and death
+              </p>
             </div>
             <div class="realm-req" style="color: var(--gold-light)">
               250,000 Qi + Immortal Essence
@@ -210,7 +1080,8 @@
         <span class="section-label">Getting Started</span>
         <h2 class="section-title">Begin Your Cultivation</h2>
         <p class="section-desc">
-          Your immortal journey begins with a single step.
+          Your immortal journey begins with a single step. Follow the path
+          below.
         </p>
         <div class="steps-wrap">
           <div class="step">
@@ -218,8 +1089,9 @@
             <div>
               <p class="step-title">Join the Discord Server</p>
               <p class="step-desc">
-                Enter our cultivation community and register your cultivator
-                profile.
+                Enter our cultivation community and accept the welcome ritual to
+                register your cultivator profile. Your journey begins the moment
+                you step through the gate.
               </p>
               <span class="step-cmd">/start</span>
             </div>
@@ -227,26 +1099,29 @@
           <div class="step">
             <div class="step-num">02</div>
             <div>
-              <p class="step-title">Cultivate Daily</p>
+              <p class="step-title">Begin Daily Cultivation</p>
               <p class="step-desc">
-                Meditate each day to gather Qi and complete daily missions for
-                Spirit Stones.
+                Meditate each day to gather Qi. Qi is the lifeblood of your
+                progression — without it, breakthroughs are impossible. Complete
+                daily missions for bonus Spirit Stones.
               </p>
-              <span class="step-cmd">/cultivate</span
-              ><span class="step-cmd" style="margin-left: 0.5rem"
-                >/mission</span
-              >
+              <span class="step-cmd">/cultivate</span>
+              <span class="step-cmd" style="margin-left: 0.5rem">/mission</span>
             </div>
           </div>
           <div class="step">
             <div class="step-num">03</div>
             <div>
-              <p class="step-title">Join a Sect</p>
+              <p class="step-title">Join or Found a Sect</p>
               <p class="step-desc">
                 Sects provide protection, shared resources, and collective
-                power.
+                power. A lone cultivator rarely survives the long road to
+                immortality — find your people.
               </p>
               <span class="step-cmd">/sect join</span>
+              <span class="step-cmd" style="margin-left: 0.5rem"
+                >/sect create</span
+              >
             </div>
           </div>
           <div class="step">
@@ -254,8 +1129,9 @@
             <div>
               <p class="step-title">Attempt a Breakthrough</p>
               <p class="step-desc">
-                Gather enough Qi and the required item, then dare to shatter
-                your realm ceiling.
+                When you have gathered enough Qi and obtained the required item,
+                dare to shatter your realm ceiling. Success brings power;
+                failure costs resources — but not your life.
               </p>
               <span class="step-cmd">/breakthrough</span>
             </div>
@@ -265,8 +1141,9 @@
             <div>
               <p class="step-title">Ascend to Immortality</p>
               <p class="step-desc">
-                Seven realms stand between you and the peak. The True Immortal
-                title is held by only one.
+                Seven realms stand between you and the peak. Each ascension
+                changes your power fundamentally. The True Immortal title is
+                held by only one cultivator at a time.
               </p>
               <span class="step-cmd">/leaderboard</span>
             </div>
@@ -277,139 +1154,139 @@
 
     <!-- SHOP -->
     <section id="shop">
-      <div class="centered">
+      <div class="shop-intro">
         <span class="section-label">In-Game Shop</span>
-        <h2 class="section-title">Buy Jade Coins</h2>
-        <p class="section-desc centered">
-          Purchase Jade Coins and they are credited to your account
-          automatically via BCA transfer.
+        <h2 class="section-title">Jade Coin Packages</h2>
+        <p class="section-desc">
+          Jade Coins are the premium currency of the cultivation world. Purchase
+          packages below and redeem your code in Discord to receive your coins
+          instantly.
         </p>
       </div>
 
-      <!-- NOT LOGGED IN -->
-      <div class="shop-login-wall" id="shop-login-wall">
-        <p>
-          Login with your Discord account to link your purchase to your in-game
-          profile.
-        </p>
-        <a
-          class="btn-discord-login"
-          href="#"
-          onclick="loginWithDiscord()"
-          style="display: inline-flex; justify-content: center"
+      <div class="currency-explainer">
+        <div class="currency-card">
+          <span class="currency-icon">🪙</span>
+          <p class="currency-name">Spirit Stones</p>
+          <p class="currency-desc">
+            Earned in-game through missions, duels & cultivation
+          </p>
+        </div>
+        <div>
+          <p class="currency-arrow">⇄</p>
+          <p class="currency-rate">100 Spirit Stones<br />= 1 Jade Coin</p>
+        </div>
+        <div class="currency-card">
+          <span class="currency-icon">💎</span>
+          <p class="currency-name">Jade Coins</p>
+          <p class="currency-desc">
+            Premium currency — purchase packages &amp; redeem in Discord
+          </p>
+        </div>
+      </div>
+
+      <div class="packages-grid" id="packages">
+        <div
+          class="pkg-card"
+          onclick="openModal(this)"
+          data-name="Disciple Satchel"
+          data-amount="100"
+          data-price="$1.99"
+          data-icon="💎"
         >
-          Login with Discord to Purchase
-        </a>
-      </div>
-
-      <!-- LOGGED IN SHOP -->
-      <div class="shop-content" id="shop-content">
-        <!-- Balance -->
-        <div class="balance-card">
-          <div class="balance-item">
-            <p class="balance-label">Realm</p>
-            <p class="balance-value" id="bal-realm">—</p>
-          </div>
-          <div class="balance-item">
-            <p class="balance-label">Spirit Stones</p>
-            <p class="balance-value gold" id="bal-stones">—</p>
-          </div>
-          <div class="balance-item">
-            <p class="balance-label">Jade Coins</p>
-            <p class="balance-value jade" id="bal-jade">—</p>
-          </div>
+          <span class="pkg-icon">💎</span>
+          <p class="pkg-name">Disciple Satchel</p>
+          <p class="pkg-amount">100</p>
+          <p class="pkg-coin-label">Jade Coins</p>
+          <p class="pkg-bonus">&nbsp;</p>
+          <p class="pkg-price">$1.99</p>
+          <button class="btn-primary" style="width: 100%; font-size: 0.8rem">
+            Purchase
+          </button>
         </div>
-
-        <!-- Packages -->
-        <div class="packages-grid">
-          <div class="pkg-card" data-id="disciple">
-            <span class="pkg-icon">💎</span>
-            <p class="pkg-name">Disciple Satchel</p>
-            <p class="pkg-amount">100</p>
-            <p class="pkg-coin-label">Jade Coins</p>
-            <p class="pkg-bonus">&nbsp;</p>
-            <p class="pkg-price">Rp 30.000</p>
-            <button class="pkg-btn" onclick="checkout('disciple', this)">
-              Pay via BCA
-            </button>
-          </div>
-          <div class="pkg-card" data-id="elder">
-            <span class="pkg-icon">💎💎</span>
-            <p class="pkg-name">Elder's Pouch</p>
-            <p class="pkg-amount">550</p>
-            <p class="pkg-coin-label">Jade Coins</p>
-            <p class="pkg-bonus">+50 Bonus Coins</p>
-            <p class="pkg-price">Rp 120.000</p>
-            <button class="pkg-btn" onclick="checkout('elder', this)">
-              Pay via BCA
-            </button>
-          </div>
-          <div class="pkg-card featured" data-id="sect">
-            <span class="pkg-badge">⚡ Most Popular</span>
-            <span class="pkg-icon">💎💎💎</span>
-            <p class="pkg-name">Sect Master Vault</p>
-            <p class="pkg-amount">1,400</p>
-            <p class="pkg-coin-label">Jade Coins</p>
-            <p class="pkg-bonus">+200 Bonus Coins</p>
-            <p class="pkg-price">Rp 220.000</p>
-            <button class="pkg-btn" onclick="checkout('sect', this)">
-              Pay via BCA
-            </button>
-          </div>
-          <div class="pkg-card" data-id="immortal">
-            <span class="pkg-icon">✨</span>
-            <p class="pkg-name">Immortal Hoard</p>
-            <p class="pkg-amount">3,800</p>
-            <p class="pkg-coin-label">Jade Coins</p>
-            <p class="pkg-bonus">+800 Bonus Coins</p>
-            <p class="pkg-price">Rp 450.000</p>
-            <button class="pkg-btn" onclick="checkout('immortal', this)">
-              Pay via BCA
-            </button>
-          </div>
-        </div>
-
-        <p
-          style="
-            text-align: center;
-            font-size: 0.78rem;
-            color: var(--mist-dim);
-            margin-top: 2rem;
-          "
+        <div
+          class="pkg-card"
+          onclick="openModal(this)"
+          data-name="Elder's Pouch"
+          data-amount="500"
+          data-price="$7.99"
+          data-icon="💎💎"
         >
-          Payment processed securely via Midtrans · BCA Virtual Account · Coins
-          credited automatically after payment
-        </p>
-
-        <!-- Purchase History -->
-        <div class="history-wrap" id="history-wrap" style="display: none">
-          <h3
-            style="
-              font-family: &quot;Cinzel&quot;, serif;
-              color: var(--scroll);
-              margin-bottom: 1rem;
-              font-size: 1rem;
-            "
-          >
-            Purchase History
-          </h3>
-          <div id="history-list"></div>
+          <span class="pkg-icon">💎💎</span>
+          <p class="pkg-name">Elder's Pouch</p>
+          <p class="pkg-amount">500</p>
+          <p class="pkg-coin-label">Jade Coins</p>
+          <p class="pkg-bonus">+50 Bonus Coins</p>
+          <p class="pkg-price">$7.99</p>
+          <button class="btn-primary" style="width: 100%; font-size: 0.8rem">
+            Purchase
+          </button>
+        </div>
+        <div
+          class="pkg-card featured"
+          onclick="openModal(this)"
+          data-name="Sect Master Vault"
+          data-amount="1200"
+          data-price="$14.99"
+          data-icon="💎💎💎"
+        >
+          <span class="pkg-badge">⚡ Most Popular</span>
+          <span class="pkg-icon">💎💎💎</span>
+          <p class="pkg-name">Sect Master Vault</p>
+          <p class="pkg-amount">1,200</p>
+          <p class="pkg-coin-label">Jade Coins</p>
+          <p class="pkg-bonus">+200 Bonus Coins</p>
+          <p class="pkg-price">$14.99</p>
+          <button class="btn-primary" style="width: 100%; font-size: 0.8rem">
+            Purchase
+          </button>
+        </div>
+        <div
+          class="pkg-card"
+          onclick="openModal(this)"
+          data-name="Immortal Hoard"
+          data-amount="3000"
+          data-price="$29.99"
+          data-icon="✨"
+        >
+          <span class="pkg-icon">✨</span>
+          <p class="pkg-name">Immortal Hoard</p>
+          <p class="pkg-amount">3,000</p>
+          <p class="pkg-coin-label">Jade Coins</p>
+          <p class="pkg-bonus">+800 Bonus Coins</p>
+          <p class="pkg-price">$29.99</p>
+          <button class="btn-primary" style="width: 100%; font-size: 0.8rem">
+            Purchase
+          </button>
         </div>
       </div>
+
+      <p
+        style="
+          text-align: center;
+          font-size: 0.78rem;
+          color: var(--mist-dim);
+          margin-top: 2.5rem;
+        "
+      >
+        After purchase, use
+        <span style="color: var(--jade-light); font-family: monospace"
+          >/redeem &lt;code&gt;</span
+        >
+        in Discord to receive your Jade Coins.
+      </p>
     </section>
 
     <!-- DISCORD CTA -->
     <section id="discord">
       <div class="discord-card">
         <span class="discord-icon">🎮</span>
-        <h2 class="discord-title">Ready to Begin?</h2>
+        <h2 class="discord-title">Ready to Begin Your Path?</h2>
         <p class="discord-desc">
           Join thousands of cultivators already walking the road to immortality.
           Free to play, boundless to explore.
         </p>
-        <a href="YOUR_DISCORD_INVITE_LINK" class="btn-discord"
-          >Join Discord Server</a
-        >
+        <a href="#" class="btn-discord">Join Discord Server</a>
       </div>
     </section>
 
@@ -417,213 +1294,215 @@
     <footer>
       <p class="footer-logo">⚡ PATH OF THE IMMORTAL</p>
       <p class="footer-note">
-        © 2025 Path of the Immortal · All purchases are final · Payments via
-        Midtrans BCA VA
+        © 2025 Path of the Immortal · All purchases are final · Not affiliated
+        with Discord Inc.
       </p>
     </footer>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
+    <!-- PURCHASE MODAL -->
+    <div class="modal-overlay" id="modal" onclick="closeOnOverlay(event)">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modal-form-content">
+          <h3 class="modal-title" id="modal-title">Purchase Jade Coins</h3>
+          <p class="modal-sub" id="modal-sub">Complete your order below</p>
+          <div class="modal-notice">
+            💎 Coins will be credited to your Discord account. You must be a
+            member of the server to receive them. Use
+            <code style="color: var(--jade-light)">/redeem</code> after
+            purchase.
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label>Discord Username</label>
+            <input
+              type="text"
+              id="discord-user"
+              placeholder="YourName#0000 or your username"
+            />
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label>Email Address</label>
+            <input
+              type="email"
+              id="email-input"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div class="modal-divider"></div>
+          <p
+            style="
+              font-family: &quot;Cinzel&quot;, serif;
+              font-size: 0.7rem;
+              color: var(--mist-dim);
+              margin-bottom: 0.7rem;
+              letter-spacing: 0.05em;
+            "
+          >
+            PAYMENT DETAILS
+          </p>
+          <div class="form-group" style="margin-bottom: 1rem">
+            <label>Card Number</label>
+            <input
+              type="text"
+              id="card-num"
+              placeholder="0000 0000 0000 0000"
+              maxlength="19"
+              oninput="fmtCard(this)"
+            />
+          </div>
+          <div class="modal-row">
+            <div class="form-group">
+              <label>Expiry</label>
+              <input
+                type="text"
+                id="card-exp"
+                placeholder="MM / YY"
+                maxlength="7"
+                oninput="fmtExp(this)"
+              />
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input
+                type="text"
+                id="card-cvv"
+                placeholder="•••"
+                maxlength="4"
+              />
+            </div>
+          </div>
+          <div class="modal-divider"></div>
+          <div class="modal-summary">
+            <span id="modal-pkg-label">Package</span>
+            <span class="modal-total" id="modal-total-price">$0.00</span>
+          </div>
+          <button class="btn-pay" onclick="processPayment()">
+            Complete Purchase
+          </button>
+          <p class="modal-secure">
+            🔒 Secured · Jade Coins delivered within 60 seconds
+          </p>
+        </div>
+        <div class="success-box" id="modal-success">
+          <span class="success-icon">✅</span>
+          <p class="success-title">Purchase Successful!</p>
+          <p
+            style="
+              font-size: 0.8rem;
+              color: var(--mist-dim);
+              margin-bottom: 0.5rem;
+            "
+          >
+            Your redemption code:
+          </p>
+          <div class="success-code" id="redeem-code">—</div>
+          <p class="success-desc">
+            Head to the Discord server and use <br /><code
+              style="color: var(--jade-light)"
+              >/redeem YOUR_CODE</code
+            ><br />to receive your Jade Coins. A receipt has been sent to your
+            email.
+          </p>
+        </div>
+      </div>
+    </div>
 
     <script>
-      // ─── CONFIG ───────────────────────────────────────────────
-      const BACKEND = "http://localhost:8000"; // Change to your deployed backend URL
+      let currentPkg = {};
 
-      // ─── STATE ────────────────────────────────────────────────
-      let token = null;
-      let currentUser = null;
+      function openModal(el) {
+        currentPkg = {
+          name: el.dataset.name,
+          amount: el.dataset.amount,
+          price: el.dataset.price,
+          icon: el.dataset.icon,
+        };
+        document.getElementById("modal-title").textContent =
+          currentPkg.icon + " " + currentPkg.name;
+        document.getElementById("modal-sub").textContent =
+          currentPkg.amount + " Jade Coins · " + currentPkg.price;
+        document.getElementById("modal-pkg-label").textContent =
+          currentPkg.name + " (" + currentPkg.amount + " Coins)";
+        document.getElementById("modal-total-price").textContent =
+          currentPkg.price;
+        document.getElementById("modal-form-content").style.display = "block";
+        document.getElementById("modal-success").style.display = "none";
+        document.getElementById("modal").classList.add("open");
+        clearFields();
+      }
 
-      // ─── ON LOAD ──────────────────────────────────────────────
-      window.addEventListener("DOMContentLoaded", async () => {
-        // Check for token in URL (redirect from Discord OAuth)
-        const params = new URLSearchParams(window.location.search);
-        const urlToken = params.get("token");
-        if (urlToken) {
-          localStorage.setItem("poti_token", urlToken);
-          window.history.replaceState(
-            {},
-            "",
-            window.location.pathname + "#shop",
-          );
+      function closeModal() {
+        document.getElementById("modal").classList.remove("open");
+      }
+
+      function closeOnOverlay(e) {
+        if (e.target === document.getElementById("modal")) closeModal();
+      }
+
+      function clearFields() {
+        [
+          "discord-user",
+          "email-input",
+          "card-num",
+          "card-exp",
+          "card-cvv",
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = "";
+        });
+      }
+
+      function fmtCard(el) {
+        let v = el.value.replace(/\D/g, "").substring(0, 16);
+        el.value = v.replace(/(.{4})/g, "$1 ").trim();
+      }
+
+      function fmtExp(el) {
+        let v = el.value.replace(/\D/g, "").substring(0, 4);
+        if (v.length >= 3) v = v.substring(0, 2) + " / " + v.substring(2);
+        el.value = v;
+      }
+
+      function generateCode() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let code = "";
+        for (let i = 0; i < 12; i++) {
+          if (i === 4 || i === 8) code += "-";
+          code += chars[Math.floor(Math.random() * chars.length)];
         }
-
-        token = localStorage.getItem("poti_token");
-        if (token) {
-          await loadUser();
-        }
-      });
-
-      async function loadUser() {
-        try {
-          const res = await fetch(`${BACKEND}/auth/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (!res.ok) {
-            logout();
-            return;
-          }
-          currentUser = await res.json();
-          showLoggedIn();
-          await loadHistory();
-        } catch (e) {
-          console.error(e);
-        }
+        return code;
       }
 
-      function showLoggedIn() {
-        // Nav
-        document.getElementById("btn-login").classList.add("hidden");
-        document.getElementById("btn-shop-nav").style.display = "block";
-        const navUser = document.getElementById("nav-user");
-        navUser.classList.add("visible");
-        document.getElementById("nav-avatar").src =
-          currentUser.avatar ||
-          "https://cdn.discordapp.com/embed/avatars/0.png";
-        document.getElementById("nav-username").textContent =
-          currentUser.username;
+      function processPayment() {
+        const user = document.getElementById("discord-user").value.trim();
+        const email = document.getElementById("email-input").value.trim();
+        const card = document.getElementById("card-num").value.trim();
+        const exp = document.getElementById("card-exp").value.trim();
+        const cvv = document.getElementById("card-cvv").value.trim();
 
-        // Shop
-        document.getElementById("shop-login-wall").style.display = "none";
-        document.getElementById("shop-content").classList.add("visible");
-
-        // Balance
-        const REALMS = [
-          "",
-          "Qi Condensation",
-          "Foundation Building",
-          "Core Formation",
-          "Nascent Soul",
-          "Spirit Severing",
-          "Dao Seeking",
-          "True Immortal",
-        ];
-        document.getElementById("bal-realm").textContent =
-          REALMS[currentUser.realm] || "Unknown";
-        document.getElementById("bal-stones").textContent =
-          "🪙 " + currentUser.spirit_stones.toLocaleString();
-        document.getElementById("bal-jade").textContent =
-          "💎 " + currentUser.jade_coins.toLocaleString();
-      }
-
-      function loginWithDiscord() {
-        window.location.href = `${BACKEND}/auth/login`;
-      }
-
-      function logout() {
-        localStorage.removeItem("poti_token");
-        token = null;
-        currentUser = null;
-        location.reload();
-      }
-
-      // ─── CHECKOUT ─────────────────────────────────────────────
-      async function checkout(packageId, btn) {
-        if (!token) {
-          loginWithDiscord();
+        if (
+          !user ||
+          !email ||
+          card.replace(/\s/g, "").length < 16 ||
+          exp.length < 7 ||
+          cvv.length < 3
+        ) {
+          alert("Please fill in all fields correctly.");
           return;
         }
 
-        const originalText = btn.textContent;
+        const btn = document.querySelector(".btn-pay");
+        btn.textContent = "Processing…";
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span>Creating order…';
 
-        try {
-          const res = await fetch(`${BACKEND}/shop/checkout/${packageId}`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          });
-          if (!res.ok) {
-            const err = await res.json();
-            showToast(
-              "Error: " + (err.detail || "Something went wrong"),
-              "error",
-            );
-            return;
-          }
-          const data = await res.json();
-
-          // Open Midtrans Snap popup
-          window.snap.pay(data.snap_token, {
-            onSuccess: async (result) => {
-              showToast(
-                "Payment successful! Jade Coins are being credited…",
-                "success",
-              );
-              setTimeout(async () => {
-                await loadUser();
-                await loadHistory();
-              }, 3000);
-            },
-            onPending: (result) => {
-              showToast(
-                "Waiting for BCA transfer. Complete it before it expires!",
-                "success",
-              );
-              loadHistory();
-            },
-            onError: (result) => {
-              showToast("Payment failed. Please try again.", "error");
-            },
-            onClose: () => {
-              showToast("Payment window closed.", "error");
-            },
-          });
-        } catch (e) {
-          showToast("Network error. Please try again.", "error");
-        } finally {
-          btn.disabled = false;
-          btn.textContent = originalText;
-        }
-      }
-
-      // ─── HISTORY ──────────────────────────────────────────────
-      async function loadHistory() {
-        try {
-          const res = await fetch(`${BACKEND}/shop/history`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const rows = await res.json();
-          if (!rows.length) return;
-
-          document.getElementById("history-wrap").style.display = "block";
-          const list = document.getElementById("history-list");
-          list.innerHTML = `
-        <div class="history-row">
-          <span>Package</span><span>Coins</span><span>Status</span>
-        </div>
-      `;
-          rows.forEach((r) => {
-            const statusClass =
-              r.status === "paid"
-                ? "badge-paid"
-                : r.status === "pending"
-                  ? "badge-pending"
-                  : "badge-expire";
-            const date = new Date(r.created_at).toLocaleDateString("id-ID");
-            list.innerHTML += `
-          <div class="history-row">
-            <span>${r.package_id} <span style="color:var(--mist-dim);font-size:0.75rem">${date}</span></span>
-            <span style="color:var(--gold-light)">💎 ${r.jade_coins.toLocaleString()}</span>
-            <span class="${statusClass}">${r.status}</span>
-          </div>
-        `;
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      // ─── TOAST ────────────────────────────────────────────────
-      function showToast(msg, type = "success") {
-        const t = document.getElementById("toast");
-        t.textContent = msg;
-        t.className = `toast ${type} show`;
         setTimeout(() => {
-          t.className = "toast";
-        }, 4000);
+          const code = generateCode();
+          document.getElementById("redeem-code").textContent = code;
+          document.getElementById("modal-form-content").style.display = "none";
+          document.getElementById("modal-success").style.display = "block";
+          btn.textContent = "Complete Purchase";
+          btn.disabled = false;
+        }, 1800);
       }
     </script>
   </body>
