@@ -160,7 +160,7 @@ def jade_embed(title: str, desc: str, color: int = 0x1a7a5c) -> discord.Embed:
     e.set_footer(text="Path of the Immortal 修仙之路")
     return e
 
-WEBSITE_URL = os.getenv("FRONTEND_URL", "https://yourdomain.com")
+WEBSITE_URL = os.getenv("FRONTEND_URL", "https://path-of-the-immortal.vercel.app/#shop")
 
 # ─────────────────────────────────────────────
 # COMMANDS

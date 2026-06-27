@@ -28,7 +28,7 @@ MIDTRANS_SERVER_KEY   = os.getenv("MIDTRANS_SERVER_KEY")
 MIDTRANS_CLIENT_KEY   = os.getenv("MIDTRANS_CLIENT_KEY")
 MIDTRANS_IS_PROD      = os.getenv("MIDTRANS_IS_PROD", "false").lower() == "true"
 JWT_SECRET            = os.getenv("JWT_SECRET", secrets.token_hex(32))
-FRONTEND_URL          = os.getenv("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL          = os.getenv("FRONTEND_URL", "https://path-of-the-immortal.vercel.app/#shop")
 DISCORD_API           = "https://discord.com/api/v10"
 
 PACKAGES = {
