@@ -16,20 +16,21 @@ from fastapi import FastAPI, Request, HTTPException, Depends, Header
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from jose import jwt, JWTError
+from pathlib import Path
 
-load_dotenv()
+load_dotenv(dotenv_path=Path(__file__).parent / ".env")
 
 # ── CONFIG ──────────────────────────────────────────────────
-DATABASE_URL          = os.getenv("DATABASE_URL")
-DISCORD_CLIENT_ID     = os.getenv("DISCORD_CLIENT_ID")
+DATABASE_URL = os.getenv("DATABASE_URL")
+DISCORD_CLIENT_ID = os.getenv("DISCORD_CLIENT_ID")
 DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET")
-DISCORD_REDIRECT_URI  = os.getenv("DISCORD_REDIRECT_URI")
-MIDTRANS_SERVER_KEY   = os.getenv("MIDTRANS_SERVER_KEY")
-MIDTRANS_CLIENT_KEY   = os.getenv("MIDTRANS_CLIENT_KEY")
-MIDTRANS_IS_PROD      = os.getenv("MIDTRANS_IS_PROD", "false").lower() == "true"
-JWT_SECRET            = os.getenv("JWT_SECRET", secrets.token_hex(32))
-FRONTEND_URL          = os.getenv("FRONTEND_URL", "https://path-of-the-immortal.vercel.app/#shop")
-DISCORD_API           = "https://discord.com/api/v10"
+DISCORD_REDIRECT_URI = os.getenv("DISCORD_REDIRECT_URI")
+MIDTRANS_SERVER_KEY = os.getenv("MIDTRANS_SERVER_KEY")
+MIDTRANS_CLIENT_KEY = os.getenv("MIDTRANS_CLIENT_KEY")
+MIDTRANS_IS_PROD = os.getenv("MIDTRANS_IS_PROD", "false").lower() == "true"
+JWT_SECRET = os.getenv("JWT_SECRET", secrets.token_hex(32))
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://path-of-the-immortal.vercel.app")
+DISCORD_API = "https://discord.com/api/v10"
 
 PACKAGES = {
     "disciple": {"name": "Disciple Satchel",  "jade": 100,  "price_idr": 30_000},
@@ -43,7 +44,10 @@ app = FastAPI(title="Path of the Immortal API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL, "http://localhost:3000", "http://127.0.0.1:5500"],
+    allow_origins=[
+        FRONTEND_URL,
+        "https://path-of-the-immortal.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
