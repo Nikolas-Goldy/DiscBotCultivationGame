@@ -64,7 +64,7 @@ pool: asyncpg.Pool = None
 @app.on_event("startup")
 async def startup():
     global pool
-    pool = await asyncpg.create_pool(DATABASE_URL, min_size=2, max_size=10)
+    pool = await asyncpg.create_pool(DATABASE_URL, min_size=2, max_size=10, ssl="require")
     await create_tables()
     print("✅ Database connected")
 

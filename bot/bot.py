@@ -580,7 +580,7 @@ async def admin_give(interaction: discord.Interaction,
 @bot.event
 async def on_ready():
     global pool
-    pool = await asyncpg.create_pool(DATABASE_URL, min_size=2, max_size=10)
+    pool = await asyncpg.create_pool(DATABASE_URL, min_size=2, max_size=10, ssl="require")
     await tree.sync()
     print(f"⚡ Bot online as {bot.user}")
     await bot.change_presence(activity=discord.Activity(
